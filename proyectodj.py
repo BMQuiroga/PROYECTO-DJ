@@ -3,6 +3,7 @@ import speech_recognition as sr
 import os
 import difflib as dl
 import playsound
+import webbrowser
 
 def speech_recorder():
     r = sr.Recognizer()
@@ -29,11 +30,11 @@ def main():
     path2 = 'D:\\Descargas\\backup\\Internet Explorer' + invertedslash + tema[0]
     
     print(path2)
-    playsound.playsound(os.path.relpath(path2))
+    #playsound.playsound(os.path.relpath(path2))
+    webbrowser.open(path2)
 
 main()
 
 #TODOLIST
 #1 - RECONOCIMIENTO DE AUDIO
-#2 - PATH RELATIVO
 #3 - EL GET CLOSE MATCHES HACE CUALQUIER COSA

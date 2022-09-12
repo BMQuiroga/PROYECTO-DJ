@@ -1,7 +1,3 @@
-from email.mime import image
-from logging import exception
-from pickletools import TAKEN_FROM_ARGUMENT1
-
 import speech_recognition as sr
 import os
 import difflib as dl
@@ -68,18 +64,26 @@ def main_audio():
 
 
     audio = speech_recorder()
+   
     
-    
-    #print(audio)
+    print(audio)
     lista = os.listdir('D:\\Descargas\\backup\\Internet Explorer')
-    
-    tema = dl.get_close_matches(audio,lista,8,0.1)
+
+    #elementos = 0
+    cutoff = 0.1
     tema2 = []
+
+    #while elementos < 8:
+    tema = dl.get_close_matches(audio,lista,8,cutoff)
     for elemento in tema:
         if elemento.find('.mp3') != -1:
             tema2.append(elemento)
+        #elementos = len(tema2)
+        #cutoff = cutoff + 0.01
     
-
+    while len(tema2) > 8:
+        tema2.pop
+    
     return tema2
 
 def path_creator(tema):
@@ -101,10 +105,13 @@ def menu_dj():
     temas = main_audio()
     #temas = ['TEMA1GENERICO.mp3','TEMA2GENERICO.mp3','TEMA3GENERICO.mp3','TEMA4GENERICO.mp3']
     button = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\button2.png").convert()
+    returnbutton = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\return.png").convert()
+    button_re = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\button_re.png").convert()
     botones = []
     textos = []
     tamaño = len(temas)
-    
+    boton_return = boton(960,0,returnbutton,0.1)
+    boton_no = boton(960,40,button_re,0.3)
     
     for i in range(tamaño):
         botones.append(boton(50,50+(i*70),button,0.2))
@@ -117,6 +124,8 @@ def menu_dj():
     while 1:
         screen.blit(background,[0,0])
 
+
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit()
@@ -126,7 +135,11 @@ def menu_dj():
                 end(temas[j])
             screen.blit(textos[j],[130,40+(j*70)])
                 
-            
+        if boton_return.draw():
+            return    
+        if boton_no.draw():
+            exit()
+        
         pygame.display.flip()
 
 
@@ -169,8 +182,8 @@ def mainmenu():
 
 def main():
     mainmenu()
-
-    menu_dj()
+    while 1:
+        menu_dj()
 
 
 

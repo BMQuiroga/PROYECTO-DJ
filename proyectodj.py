@@ -1,5 +1,6 @@
 from email.mime import image
 from logging import exception
+from pickletools import TAKEN_FROM_ARGUMENT1
 
 import speech_recognition as sr
 import os
@@ -11,10 +12,6 @@ import pygame
 pygame.init()
 
 screen = pygame.display.set_mode((1024,696))
-
-def commands(numero):
-    pass
-
 
 
 class boton():
@@ -74,26 +71,66 @@ def main_audio():
     #print(audio)
     lista = os.listdir('D:\\Descargas\\backup\\Internet Explorer')
     #print(lista)
-    tema = dl.get_close_matches(audio,lista,1,0.1)
-    #print(tema)
+    tema = dl.get_close_matches(audio,lista,6,0.1)
+    
+
+    return tema
+
+def path_creator(tema):
     
     invertedslash = '\\'
 
     #print(invertedslash)
-    path2 = 'D:\\Descargas\\backup\\Internet Explorer' + invertedslash + tema[0]
+    path = 'D:\\Descargas\\backup\\Internet Explorer' + invertedslash + tema
+    return path
+
+def end(tema):
+    webbrowser.open(path_creator(tema))
+    exit()
+
+def menu_dj():
+    background = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\dj.jpg").convert()
     
-    #print(path2)
+    arial = pygame.font.SysFont('Arial', 60)
+    #temas = main_audio()
+    temas = ['TEMA1GENERICO','TEMA2GENERICO','TEMA3GENERICO','TEMA4GENERICO']
+    button = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\button2.png").convert()
+    botones = []
+    textos = []
+    tamaño = len(temas)
     
-    webbrowser.open(path2)
+    
+    for i in range(tamaño):
+        botones.append(boton(50,50+(i*70),button,0.2))
+        textos.append(arial.render(temas[i],False,(128,0,128)))
 
 
-def main():
+    
+
+    while 1:
+        screen.blit(background,[0,0])
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit()
+        
+        for j in range(tamaño):
+            if botones[j].draw():
+                end(temas[j])
+            screen.blit(textos[j],[130,40+(j*70)])
+                
+            
+        pygame.display.flip()
+
+
+
+def mainmenu():
     
 
     arial = pygame.font.SysFont('Arial', 100)
     texto_si = arial.render('Si',False,(0,0,0))
     texto_no = arial.render('No',False,(0,0,0))
-    rojo = (255,0,0)
+    #rojo = (255,0,0)
     background = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\dj.jpg").convert()
     button = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\button_re.png").convert()
 
@@ -114,14 +151,24 @@ def main():
             exit()
         if boton_si.draw():
             print('si')
+            return
 
         screen.blit(texto_si,[300,400])
         screen.blit(texto_no,[1024-300-158,400])
 
 
-        #screen.blit(button,[300,440])
-        #screen.blit(button,[1024-300-158,440])
+
         pygame.display.flip()
+
+def main():
+    mainmenu()
+
+    menu_dj()
+
+
+
+
+
 
 
 if __name__ == '__main__':

@@ -2,37 +2,13 @@ import speech_recognition as sr
 import os
 import difflib as dl
 import webbrowser
+import button_class
 
 import pygame
 
 pygame.init()
 
 screen = pygame.display.set_mode((1024,696))
-
-
-class boton():
-    def __init__(self,x,y,img,size):
-        
-        self.x = x
-        self.y = y
-        self.width = img.get_width()
-        self.height = img.get_height()
-        self.img = pygame.transform.scale(img,(int(self.width * size),int(self.height * size)))
-        self.rect = self.img.get_rect()
-        self.rect.topleft = (x,y)
-        self.click = False
-
-    def draw(self):
-        action = False
-        screen.blit(self.img,[self.x,self.y])
-        if self.rect.collidepoint(pygame.mouse.get_pos()):
-            if pygame.mouse.get_pressed()[0] and not self.click:
-                self.click = True
-                action = True
-        if not pygame.mouse.get_pressed()[0]:
-            self.click = False
-            action = False
-        return action
 
 
 def speech_recorder():
@@ -122,11 +98,11 @@ def menu_dj():
     botones = []
     textos = []
     tamaño = len(temas)
-    boton_return = boton(960,0,returnbutton,0.1)
-    boton_no = boton(960,40,button_re,0.3)
+    boton_return = button_class.boton(960,0,returnbutton,0.1)
+    boton_no = button_class.boton(960,40,button_re,0.3)
     
     for i in range(tamaño):
-        botones.append(boton(50,50+(i*70),button,0.2))
+        botones.append(button_class.boton(50,50+(i*70),button,0.2))
         textos.append(arial.render(temas[i].split('.MP3')[0],False,(128,0,128)))
 
     #print(temas)#tienen el .mp3 como deberian
@@ -143,13 +119,13 @@ def menu_dj():
                 exit()
         
         for j in range(tamaño):
-            if botones[j].draw():
+            if botones[j].draw(screen):
                 end(temas[j])
             screen.blit(textos[j],[130,40+(j*70)])
                 
-        if boton_return.draw():
+        if boton_return.draw(screen):
             return    
-        if boton_no.draw():
+        if boton_no.draw(screen):
             exit()
         
         pygame.display.flip()
@@ -166,8 +142,8 @@ def mainmenu():
     background = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\dj.jpg").convert()
     button = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\button_re.png").convert()
 
-    boton_si = boton(300,440,button,1)
-    boton_no = boton(1024-300-158,440,button,1)
+    boton_si = button_class.boton(300,440,button,1)
+    boton_no = button_class.boton(1024-300-158,440,button,1)
 
     while 1:
 
@@ -179,9 +155,9 @@ def mainmenu():
         screen.blit(background,[0,0])
 
 
-        if boton_no.draw():
+        if boton_no.draw(screen):
             exit()
-        if boton_si.draw():
+        if boton_si.draw(screen):
             print('si')
             return
 

@@ -67,7 +67,16 @@ def main_audio():
    
     
     print(audio)
+
+    
     lista = os.listdir('D:\\Descargas\\backup\\Internet Explorer')
+    lista2 = []
+    for i in range(len(lista)):
+        aux = lista.pop()
+        lista.insert(0,aux.lower())
+
+    #print(lista)
+
 
     #elementos = 0
     cutoff = 0.1
@@ -77,13 +86,16 @@ def main_audio():
     tema = dl.get_close_matches(audio,lista,8,cutoff)
     for elemento in tema:
         if elemento.find('.mp3') != -1:
-            tema2.append(elemento)
+            tema2.append(elemento.upper())
         #elementos = len(tema2)
         #cutoff = cutoff + 0.01
     
     while len(tema2) > 8:
         tema2.pop
     
+    #for elemento in tema2:
+
+
     return tema2
 
 def path_creator(tema):
@@ -115,7 +127,7 @@ def menu_dj():
     
     for i in range(tamaño):
         botones.append(boton(50,50+(i*70),button,0.2))
-        textos.append(arial.render(temas[i].split('.mp3')[0],False,(128,0,128)))
+        textos.append(arial.render(temas[i].split('.MP3')[0],False,(128,0,128)))
 
     #print(temas)#tienen el .mp3 como deberian
 

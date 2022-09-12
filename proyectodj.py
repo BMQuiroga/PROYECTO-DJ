@@ -41,6 +41,7 @@ class boton():
 
 def speech_recorder():
     r = sr.Recognizer()
+    speech = 'hola'
     with sr.Microphone() as source:
         print("Say something!")
         audio = r.listen(source)
@@ -68,13 +69,18 @@ def main_audio():
 
     audio = speech_recorder()
     
+    
     #print(audio)
     lista = os.listdir('D:\\Descargas\\backup\\Internet Explorer')
-    #print(lista)
-    tema = dl.get_close_matches(audio,lista,6,0.1)
+    
+    tema = dl.get_close_matches(audio,lista,8,0.1)
+    tema2 = []
+    for elemento in tema:
+        if elemento.find('.mp3') != -1:
+            tema2.append(elemento)
     
 
-    return tema
+    return tema2
 
 def path_creator(tema):
     
@@ -92,8 +98,8 @@ def menu_dj():
     background = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\dj.jpg").convert()
     
     arial = pygame.font.SysFont('Arial', 60)
-    #temas = main_audio()
-    temas = ['TEMA1GENERICO','TEMA2GENERICO','TEMA3GENERICO','TEMA4GENERICO']
+    temas = main_audio()
+    #temas = ['TEMA1GENERICO.mp3','TEMA2GENERICO.mp3','TEMA3GENERICO.mp3','TEMA4GENERICO.mp3']
     button = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\button2.png").convert()
     botones = []
     textos = []
@@ -102,8 +108,9 @@ def menu_dj():
     
     for i in range(tamaño):
         botones.append(boton(50,50+(i*70),button,0.2))
-        textos.append(arial.render(temas[i],False,(128,0,128)))
+        textos.append(arial.render(temas[i].split('.mp3')[0],False,(128,0,128)))
 
+    #print(temas)#tienen el .mp3 como deberian
 
     
 

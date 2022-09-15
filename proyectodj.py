@@ -11,14 +11,17 @@ pygame.init()
 screen = pygame.display.set_mode((1024,696))
 
 
-def speech_recorder():
+def speech_recorder(code):
     r = sr.Recognizer()
     speech = 'hola'
     with sr.Microphone() as source:
         print("Say something!")
         audio = r.listen(source)
         try:
-            speech = r.recognize_google(audio)
+            if code == 0:
+                speech = r.recognize_google(audio,None,'language=es_ES')
+            if code == 1:
+                speech = r.recognize_google(audio)
             
             
             #print('Google: ' + speech)
@@ -35,11 +38,11 @@ def speech_recorder():
     return speech
 
 
-def main_audio():
+def main_audio(code):
 
 
 
-    audio = speech_recorder()
+    audio = speech_recorder(code)
    
     
     print(audio)
@@ -86,11 +89,11 @@ def end(tema):
     webbrowser.open(path_creator(tema))
     exit()
 
-def menu_dj():
+def menu_dj(code):
     background = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\dj.jpg").convert()
     
     arial = pygame.font.SysFont('Arial', 60)
-    temas = main_audio()
+    temas = main_audio(code)
     #temas = ['TEMA1GENERICO.mp3','TEMA2GENERICO.mp3','TEMA3GENERICO.mp3','TEMA4GENERICO.mp3']
     button = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\button2.png").convert()
     returnbutton = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\return.png").convert()
@@ -136,14 +139,16 @@ def mainmenu():
     
 
     arial = pygame.font.SysFont('Arial', 100)
+    texto_yes = arial.render('Yes',False,(0,0,0))
     texto_si = arial.render('Si',False,(0,0,0))
     texto_no = arial.render('No',False,(0,0,0))
     #rojo = (255,0,0)
     background = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\dj.jpg").convert()
     button = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\button_re.png").convert()
 
-    boton_si = button_class.boton(300,440,button,1)
-    boton_no = button_class.boton(1024-300-158,440,button,1)
+    boton_yes = button_class.boton(1024/2-158/2-250,440,button,1)
+    boton_si = button_class.boton(1024/2-158/2,440,button,1)
+    boton_no = button_class.boton(1024/2-158/2+250,440,button,1)
 
     while 1:
 
@@ -159,19 +164,24 @@ def mainmenu():
             exit()
         if boton_si.draw(screen):
             print('si')
-            return
+            return 0
+        if boton_yes.draw(screen):
+            print('yes')
+            return 1
 
-        screen.blit(texto_si,[300,400])
-        screen.blit(texto_no,[1024-300-158,400])
+        screen.blit(texto_si,[1024/2-158/2,400])
+        screen.blit(texto_no,[1024/2-158/2+250,400])
+        screen.blit(texto_yes,[1024/2-158/2-250,400])
 
 
 
         pygame.display.flip()
 
 def main():
-    mainmenu()
+    code = mainmenu()
+
     while 1:
-        menu_dj()
+        menu_dj(code)
 
 
 

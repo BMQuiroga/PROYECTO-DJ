@@ -12,14 +12,27 @@ screen = pygame.display.set_mode((1024,696))
 
 
 def speech_recorder(code):
+
+    arial = pygame.font.SysFont('Arial', 150)
+    texto_saysomething = arial.render('SAY SOMETHING',False,(128,0,128))
+    background = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\dj.jpg").convert()
+
     r = sr.Recognizer()
     speech = 'hola'
     with sr.Microphone() as source:
         print("Say something!")
+        pygame.display.flip()
+        screen.blit(background,[0,0])
+        screen.blit(texto_saysomething,[0,400])
+        pygame.display.flip()
+
+
         audio = r.listen(source)
+        
+
         try:
             if code == 0:
-                speech = r.recognize_google(audio,None,'language=es_ES')
+                speech = r.recognize_google(audio,None,language='es-AR')
             if code == 1:
                 speech = r.recognize_google(audio)
             
@@ -35,7 +48,12 @@ def speech_recorder(code):
         except Exception as e:
             print('Error' + str(e))
     
+    pygame.display.flip()
+
     return speech
+
+def menu_yt(audio):
+    pass
 
 
 def main_audio(code):
@@ -62,7 +80,7 @@ def main_audio(code):
     tema2 = []
 
     #while elementos < 8:
-    tema = dl.get_close_matches(audio,lista,8,cutoff)
+    tema = dl.get_close_matches(audio,lista,7,cutoff)
     for elemento in tema:
         if elemento.find('.mp3') != -1:
             tema2.append(elemento.upper())
@@ -75,7 +93,7 @@ def main_audio(code):
     #for elemento in tema2:
 
 
-    return tema2
+    return (tema2, audio)
 
 def path_creator(tema):
     
@@ -94,7 +112,10 @@ def menu_dj(code):
     
     arial = pygame.font.SysFont('Arial', 60)
     temas = main_audio(code)
+    audio = temas[1]
+    temas = temas[0]
     #temas = ['TEMA1GENERICO.mp3','TEMA2GENERICO.mp3','TEMA3GENERICO.mp3','TEMA4GENERICO.mp3']
+    
     button = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\button2.png").convert()
     returnbutton = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\return.png").convert()
     button_re = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\button_re.png").convert()
@@ -103,18 +124,22 @@ def menu_dj(code):
     tamaño = len(temas)
     boton_return = button_class.boton(960,0,returnbutton,0.1)
     boton_no = button_class.boton(960,40,button_re,0.3)
+    boton_yt = button_class.boton(1024-128,696-128,pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\yt_button.png").convert_alpha(),0.0625*2)
     
     for i in range(tamaño):
-        botones.append(button_class.boton(50,50+(i*70),button,0.2))
+        botones.append(button_class.boton(50,120+(i*70),button,0.2))
         textos.append(arial.render(temas[i].split('.MP3')[0],False,(128,0,128)))
 
     #print(temas)#tienen el .mp3 como deberian
+
+    str_audio = 'Busqueda: ' + audio
+    texto_audio = arial.render(str_audio,False,(255,0,0))
 
     
 
     while 1:
         screen.blit(background,[0,0])
-
+        screen.blit(texto_audio,[50,50])
 
 
         for event in pygame.event.get():
@@ -124,13 +149,16 @@ def menu_dj(code):
         for j in range(tamaño):
             if botones[j].draw(screen):
                 end(temas[j])
-            screen.blit(textos[j],[130,40+(j*70)])
+            screen.blit(textos[j],[130,110+(j*70)])
                 
         if boton_return.draw(screen):
             return    
         if boton_no.draw(screen):
             exit()
-        
+        if boton_yt.draw(screen):
+            menu_yt(audio)
+
+
         pygame.display.flip()
 
 

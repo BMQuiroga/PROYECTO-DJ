@@ -1,3 +1,4 @@
+
 import speech_recognition as sr
 import os
 import difflib as dl
@@ -125,6 +126,7 @@ def menu_dj(code):
     boton_return = button_class.boton(960,0,returnbutton,0.1)
     boton_no = button_class.boton(960,40,button_re,0.3)
     boton_yt = button_class.boton(1024-128,696-128,pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\yt_button.png").convert_alpha(),0.0625*2)
+    boton_btb = button_class.boton(960,80,pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\btb_1.png").convert_alpha(),0.1)
     
     for i in range(tamaño):
         botones.append(button_class.boton(50,120+(i*70),button,0.2))
@@ -152,11 +154,13 @@ def menu_dj(code):
             screen.blit(textos[j],[130,110+(j*70)])
                 
         if boton_return.draw(screen):
-            return    
+            return False    
         if boton_no.draw(screen):
             exit()
         if boton_yt.draw(screen):
             menu_yt(audio)
+        if boton_btb.draw(screen):
+            return True
 
 
         pygame.display.flip()
@@ -206,10 +210,13 @@ def mainmenu():
         pygame.display.flip()
 
 def main():
-    code = mainmenu()
 
     while 1:
-        menu_dj(code)
+        code = mainmenu()
+
+        while 1:
+            if menu_dj(code):
+                break
 
 
 

@@ -1,4 +1,4 @@
-
+import pywhatkit
 import speech_recognition as sr
 import os
 import difflib as dl
@@ -10,6 +10,16 @@ import pygame
 pygame.init()
 
 screen = pygame.display.set_mode((1024,696))
+
+def menu_whatsapp():
+    pass
+
+
+
+
+
+
+
 
 
 def speech_recorder(code):
@@ -54,7 +64,7 @@ def speech_recorder(code):
     return speech
 
 def menu_yt(audio):
-    pass
+    pywhatkit.playonyt(audio)
 
 
 def main_audio(code):
@@ -181,6 +191,7 @@ def mainmenu():
     boton_yes = button_class.boton(1024/2-158/2-250,440,button,1)
     boton_si = button_class.boton(1024/2-158/2,440,button,1)
     boton_no = button_class.boton(1024/2-158/2+250,440,button,1)
+    boton_wsp = button_class.boton(0,0,pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\Wsp.png").convert_alpha(),0.3)
 
     while 1:
 
@@ -200,14 +211,16 @@ def mainmenu():
         if boton_yes.draw(screen):
             print('yes')
             return 1
-
+        if boton_wsp.draw(screen):
+            print('warap')
+            return 2
         screen.blit(texto_si,[1024/2-158/2,400])
         screen.blit(texto_no,[1024/2-158/2+250,400])
         screen.blit(texto_yes,[1024/2-158/2-250,400])
 
-
-
         pygame.display.flip()
+
+
 
 def main():
 
@@ -215,8 +228,11 @@ def main():
         code = mainmenu()
 
         while 1:
-            if menu_dj(code):
-                break
+            if code == 2:
+                menu_whatsapp()
+            else:
+                if menu_dj(code):
+                    break
 
 
 

@@ -20,9 +20,15 @@ def funcionarial(n):
 
 def graficar(funcion):
     try:
+        def funcion_geogebra(int):
+            x = int
+            return round(eval(funcion))
+    except:
+        return 1
+    try:
         for i in range(LARGO):
             q = i/100 #Valor con el que se va a graficar, el pixel 1024 representa el valor 10,24
-            pygame.draw.line(screen,(255,0,0),[q,0],[q,696])
+            pygame.draw.line(screen,(255,0,0),[q,funcion_geogebra(q)],[q,funcion_geogebra(q)])
     except:
         return 1
 

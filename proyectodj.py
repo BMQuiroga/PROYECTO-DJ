@@ -4,27 +4,58 @@ import os
 import difflib as dl
 import webbrowser
 import button_class
+import pygame_textinput
 
 import pygame
 
 pygame.init()
 
-screen = pygame.display.set_mode((1024,696))
+LARGO = 1024
+ALTO = 696
 
-def menu_whatsapp():
-    pass
+screen = pygame.display.set_mode((LARGO,ALTO))
 
+def funcionarial(n):
+    return pygame.font.SysFont('Arial', n)
 
+def graficar(funcion):
+    try:
+        for i in range(LARGO):
+            q = i/100 #Valor con el que se va a graficar, el pixel 1024 representa el valor 10,24
+            pygame.draw.line(screen,(255,0,0),[q,0],[q,696])
+    except:
+        return 1
 
+def menu_geogebra():
+    
+    textinput = pygame_textinput.TextInputVisualizer()
+    boton_doit = button_class.boton(960,0,pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\doit.png").convert_alpha(),0.05)
 
+    while 1:
+        
+        screen.fill((255,255,255))
 
+        events = pygame.event.get()
 
+        textinput.update(events)
 
+        screen.blit(textinput.surface,(10,10))
 
+        for event in events:
+            if event.type == pygame.QUIT:
+                exit()
+        if boton_doit.draw(screen):
+            if graficar(textinput.value) == 1:
+                print('Error')
+
+        
+        pygame.draw.line(screen,(0,0,0),[LARGO/2,0],[LARGO/2,ALTO]) #VERTICAL
+        pygame.draw.line(screen,(0,0,0),[0,ALTO/2],[LARGO,ALTO/2]) #HORIZONTAL
+        pygame.display.update()
 
 def speech_recorder(code):
 
-    arial = pygame.font.SysFont('Arial', 150)
+    arial = funcionarial(150)
     texto_saysomething = arial.render('SAY SOMETHING',False,(128,0,128))
     background = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\dj.jpg").convert()
 
@@ -121,7 +152,7 @@ def end(tema):
 def menu_dj(code):
     background = pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\dj.jpg").convert()
     
-    arial = pygame.font.SysFont('Arial', 60)
+    arial = funcionarial(60)
     temas = main_audio(code)
     audio = temas[1]
     temas = temas[0]
@@ -180,7 +211,7 @@ def menu_dj(code):
 def mainmenu():
     
 
-    arial = pygame.font.SysFont('Arial', 100)
+    arial = funcionarial(60)
     texto_yes = arial.render('Yes',False,(0,0,0))
     texto_si = arial.render('Si',False,(0,0,0))
     texto_no = arial.render('No',False,(0,0,0))
@@ -191,7 +222,7 @@ def mainmenu():
     boton_yes = button_class.boton(1024/2-158/2-250,440,button,1)
     boton_si = button_class.boton(1024/2-158/2,440,button,1)
     boton_no = button_class.boton(1024/2-158/2+250,440,button,1)
-    boton_wsp = button_class.boton(0,0,pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\Wsp.png").convert_alpha(),0.3)
+    boton_geo = button_class.boton(0,0,pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\Wsp.png").convert_alpha(),0.3)
 
     while 1:
 
@@ -211,8 +242,8 @@ def mainmenu():
         if boton_yes.draw(screen):
             print('yes')
             return 1
-        if boton_wsp.draw(screen):
-            print('warap')
+        if boton_geo.draw(screen):
+            print('func')
             return 2
         screen.blit(texto_si,[1024/2-158/2,400])
         screen.blit(texto_no,[1024/2-158/2+250,400])
@@ -229,7 +260,7 @@ def main():
 
         while 1:
             if code == 2:
-                menu_whatsapp()
+                menu_geogebra()
             else:
                 if menu_dj(code):
                     break

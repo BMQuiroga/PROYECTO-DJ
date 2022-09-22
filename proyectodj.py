@@ -18,19 +18,26 @@ screen = pygame.display.set_mode((LARGO,ALTO))
 def funcionarial(n):
     return pygame.font.SysFont('Arial', n)
 
+def pixel_to_number(pixel):
+    return (pixel - (LARGO/2)) / 100
+
+def number_to_pixel(number):
+    return (number*-100) + (ALTO/2)
+
 def graficar(funcion):
-    try:
-        def funcion_geogebra(int):
-            x = int
-            return round(eval(funcion))
-    except:
-        return 1
-    try:
-        for i in range(LARGO):
-            q = i/100 #Valor con el que se va a graficar, el pixel 1024 representa el valor 10,24
-            pygame.draw.line(screen,(255,0,0),[q,funcion_geogebra(q)],[q,funcion_geogebra(q)])
-    except:
-        return 1
+    
+    for i in range(LARGO):
+        q = pixel_to_number(i) #Valor con el que se va a graficar, el pixel 1024 representa el valor 512 que a su vez es el numero 5,12
+        try:
+            fdex = funcion(q)
+            if fdex<(ALTO/200) and fdex>(ALTO/-200):
+                y = number_to_pixel(q)
+                pygame.draw.line(screen,(255,0,0),[i,y],[i,y])
+        except:
+            print('Error en el valor: ' + str(q))
+    pygame.display.flip()
+    return 0
+    
 
 def menu_geogebra():
     
@@ -51,7 +58,9 @@ def menu_geogebra():
             if event.type == pygame.QUIT:
                 exit()
         if boton_doit.draw(screen):
-            if graficar(textinput.value) == 1:
+            def funcion_geogebra(x):
+                return round(eval(textinput.value))
+            if graficar(funcion_geogebra) == 1:
                 print('Error')
 
         

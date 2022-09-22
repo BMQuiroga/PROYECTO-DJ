@@ -12,6 +12,7 @@ pygame.init()
 
 LARGO = 1024
 ALTO = 696
+OFFSET = 1
 
 screen = pygame.display.set_mode((LARGO,ALTO))
 
@@ -22,7 +23,7 @@ def pixel_to_number(pixel):
     return (pixel - (LARGO/2)) / 100
 
 def number_to_pixel(number):
-    return (number*-100) + (ALTO/2)
+    return round ((number*-100) + (ALTO/2))
 
 def graficar(funcion):
     
@@ -32,10 +33,11 @@ def graficar(funcion):
             fdex = funcion(q)
             if fdex<(ALTO/200) and fdex>(ALTO/-200):
                 y = number_to_pixel(q)
-                pygame.draw.line(screen,(255,0,0),[i,y],[i,y])
+                pygame.draw.line(screen,(255,0,0),[i+OFFSET,y+OFFSET],[i,y])
         except:
             print('Error en el valor: ' + str(q))
     pygame.display.flip()
+    pygame.display.update()
     return 0
     
 
@@ -43,11 +45,10 @@ def menu_geogebra():
     
     textinput = pygame_textinput.TextInputVisualizer()
     boton_doit = button_class.boton(960,0,pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\doit.png").convert_alpha(),0.05)
+    boton_quit = button_class.boton(960,60,pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\btb_1.png").convert_alpha(),0.1)
 
     while 1:
         
-        screen.fill((255,255,255))
-
         events = pygame.event.get()
 
         textinput.update(events)
@@ -59,14 +60,18 @@ def menu_geogebra():
                 exit()
         if boton_doit.draw(screen):
             def funcion_geogebra(x):
-                return round(eval(textinput.value))
+                return eval(textinput.value)
             if graficar(funcion_geogebra) == 1:
                 print('Error')
+        if boton_quit.draw(screen):
+            return True
 
         
         pygame.draw.line(screen,(0,0,0),[LARGO/2,0],[LARGO/2,ALTO]) #VERTICAL
         pygame.draw.line(screen,(0,0,0),[0,ALTO/2],[LARGO,ALTO/2]) #HORIZONTAL
         pygame.display.update()
+
+    #return True
 
 def speech_recorder(code):
 
@@ -275,7 +280,9 @@ def main():
 
         while 1:
             if code == 2:
-                menu_geogebra()
+                screen.fill((255,255,255))
+                if menu_geogebra():
+                    break
             else:
                 if menu_dj(code):
                     break

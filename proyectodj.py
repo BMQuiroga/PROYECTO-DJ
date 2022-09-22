@@ -27,38 +27,57 @@ def number_to_pixel(number):
 
 def graficar(funcion):
     
+    #screen.fill((255,255,255))
+
+    
+
+
     for i in range(LARGO):
         q = pixel_to_number(i) #Valor con el que se va a graficar, el pixel 1024 representa el valor 512 que a su vez es el numero 5,12
         try:
             fdex = funcion(q)
             if fdex<(ALTO/200) and fdex>(ALTO/-200):
-                y = number_to_pixel(q)
+                y = number_to_pixel(fdex)
                 pygame.draw.line(screen,(255,0,0),[i+OFFSET,y+OFFSET],[i,y])
         except:
             print('Error en el valor: ' + str(q))
     pygame.display.flip()
     pygame.display.update()
-    return 0
+
+    
+    boton_quit = button_class.boton(980,70,pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\return.png").convert(),0.1)
+
+    while 1:
+        if pygame.event.get() == pygame.QUIT:
+            exit()
+        if boton_quit.draw(screen):
+            return 0
+        pygame.draw.line(screen,(0,0,0),[LARGO/2,0],[LARGO/2,ALTO]) #VERTICAL
+        pygame.draw.line(screen,(0,0,0),[0,ALTO/2],[LARGO,ALTO/2]) #HORIZONTAL
+        pygame.display.update()
     
 
 def menu_geogebra():
-    
+
     textinput = pygame_textinput.TextInputVisualizer()
     boton_doit = button_class.boton(960,0,pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\doit.png").convert_alpha(),0.05)
-    boton_quit = button_class.boton(960,60,pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\btb_1.png").convert_alpha(),0.1)
+    boton_quit = button_class.boton(960,600,pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\btb_1.png").convert_alpha(),0.1)
 
     while 1:
         
+        screen.fill((255,255,255))
+
         events = pygame.event.get()
 
         textinput.update(events)
 
-        screen.blit(textinput.surface,(10,10))
+        screen.blit(textinput.surface,(10,10))#si cambias textinputsurface a screen aparece un bug jocoso
 
         for event in events:
             if event.type == pygame.QUIT:
                 exit()
         if boton_doit.draw(screen):
+            print(textinput.value)
             def funcion_geogebra(x):
                 return eval(textinput.value)
             if graficar(funcion_geogebra) == 1:
@@ -280,7 +299,7 @@ def main():
 
         while 1:
             if code == 2:
-                screen.fill((255,255,255))
+                
                 if menu_geogebra():
                     break
             else:

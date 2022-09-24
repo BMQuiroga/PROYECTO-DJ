@@ -5,6 +5,7 @@ import difflib as dl
 import webbrowser
 import button_class
 import pygame_textinput
+import math
 
 import pygame
 
@@ -16,6 +17,8 @@ OFFSET = 1
 
 screen = pygame.display.set_mode((LARGO,ALTO))
 
+
+
 def funcionarial(n):
     return pygame.font.SysFont('Arial', n)
 
@@ -26,11 +29,8 @@ def number_to_pixel(number):
     return round ((number*-100) + (ALTO/2))
 
 def graficar(funcion):
-    
+    assert str(funcion).rfind('system') == -1
     #screen.fill((255,255,255))
-
-    
-
 
     for i in range(LARGO):
         q = pixel_to_number(i) #Valor con el que se va a graficar, el pixel 1024 representa el valor 512 que a su vez es el numero 5,12
@@ -44,7 +44,6 @@ def graficar(funcion):
     pygame.display.flip()
     pygame.display.update()
 
-    
     boton_quit = button_class.boton(980,70,pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\return.png").convert(),0.1)
 
     while 1:

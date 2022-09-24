@@ -70,13 +70,12 @@ def graficar(funcion):
         
         q = pixel_to_number(i) #Valor con el que se va a graficar, el pixel 1024 representa el valor 512 que a su vez es el numero 5,12
         try:
-            print('ejecutando funcion')
             fdex = funcion(q)
             if fdex<(ALTO/200) and fdex>(ALTO/-200):
                 y = number_to_pixel(fdex)
                 pygame.draw.line(screen,(255,0,0),[i+OFFSET,y+OFFSET],[i,y])
         except:
-           #print('Error en el valor: ' + str(q))
+           print('Error en el valor: ' + str(q))
            pass
     
     dibujar_geogebra()

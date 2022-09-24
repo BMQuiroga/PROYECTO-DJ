@@ -14,34 +14,72 @@ pygame.init()
 LARGO = 1024
 ALTO = 696
 OFFSET = 1
+NUMEROS_GEO_X = 5
+NUMEROS_GEO_Y = 3
+
+
 
 screen = pygame.display.set_mode((LARGO,ALTO))
 
+def assert_not_system(string):
+    if 'system' in string:
+        print('no es x ahi pa')
+        pygame.display.quit
+        pygame.QUIT
+        exit()
 
+def dibujar_geogebra():
+    dibujar_lineas()
+    dibujar_numeros()
+    pygame.display.update()
+
+
+def dibujar_lineas():
+    pygame.draw.line(screen,(0,0,0),[LARGO/2,0],[LARGO/2,ALTO]) #VERTICAL, LINEA Y
+    pygame.draw.line(screen,(0,0,0),[0,ALTO/2],[LARGO,ALTO/2]) #HORIZONTAL, LINEA X
+    for i in range(1,NUMEROS_GEO_X+1):
+        pygame.draw.line(screen,(0,0,0),[number_to_pixel(i,LARGO),number_to_pixel(-0.1)],[number_to_pixel(i,LARGO),number_to_pixel(0.1)]) #POSITIVOS X
+        pygame.draw.line(screen,(0,0,0),[number_to_pixel(-i,LARGO),number_to_pixel(-0.1)],[number_to_pixel(-i,LARGO),number_to_pixel(0.1)]) #NEGATIVOS X
+    for i in range(1,NUMEROS_GEO_Y+1):
+        pygame.draw.line(screen,(0,0,0),[number_to_pixel(-0.1,LARGO),number_to_pixel(i)],[number_to_pixel(0.1,LARGO),number_to_pixel(i)]) #POSITIVOS Y
+        pygame.draw.line(screen,(0,0,0),[number_to_pixel(-0.1,LARGO),number_to_pixel(-i)],[number_to_pixel(0.1,LARGO),number_to_pixel(-i)]) #NEGATIVOS Y
+
+def dibujar_numeros():
+    arial = funcionarial(30)
+    for i in range(1,NUMEROS_GEO_X+1):
+        screen.blit(arial.render(str(i),False,(0,0,0)),[number_to_pixel(i,LARGO),number_to_pixel(0)]) #POSITIVOS X
+        screen.blit(arial.render(str(-i),False,(0,0,0)),[number_to_pixel(-i,LARGO),number_to_pixel(0)]) #NEGATIVOS X
+    for i in range(1,NUMEROS_GEO_Y+1):
+        screen.blit(arial.render(str(i),False,(0,0,0)),[number_to_pixel(0,LARGO),number_to_pixel(i)]) #POSITIVOS Y
+        screen.blit(arial.render(str(-i),False,(0,0,0)),[number_to_pixel(0,LARGO),number_to_pixel(-i)]) #NEGATIVOS Y
 
 def funcionarial(n):
     return pygame.font.SysFont('Arial', n)
 
-def pixel_to_number(pixel):
-    return (pixel - (LARGO/2)) / 100
+def pixel_to_number(pixel,longitud=LARGO):
+    return (pixel - (longitud/2)) / 100
 
-def number_to_pixel(number):
-    return round ((number*-100) + (ALTO/2))
+def number_to_pixel(number,longitud=ALTO):#DEFAULT 
+    return round ((number*-100) + (longitud/2))
 
 def graficar(funcion):
-    assert str(funcion).rfind('system') == -1
+    
     #screen.fill((255,255,255))
 
     for i in range(LARGO):
+        
         q = pixel_to_number(i) #Valor con el que se va a graficar, el pixel 1024 representa el valor 512 que a su vez es el numero 5,12
         try:
+            print('ejecutando funcion')
             fdex = funcion(q)
             if fdex<(ALTO/200) and fdex>(ALTO/-200):
                 y = number_to_pixel(fdex)
                 pygame.draw.line(screen,(255,0,0),[i+OFFSET,y+OFFSET],[i,y])
         except:
-            print('Error en el valor: ' + str(q))
-    pygame.display.flip()
+           #print('Error en el valor: ' + str(q))
+           pass
+    
+    dibujar_geogebra()
     pygame.display.update()
 
     boton_quit = button_class.boton(980,70,pygame.image.load("D:\Documentos\git\PROYECT\PROYECTO-DJ\\return.png").convert(),0.1)
@@ -51,8 +89,7 @@ def graficar(funcion):
             exit()
         if boton_quit.draw(screen):
             return 0
-        pygame.draw.line(screen,(0,0,0),[LARGO/2,0],[LARGO/2,ALTO]) #VERTICAL
-        pygame.draw.line(screen,(0,0,0),[0,ALTO/2],[LARGO,ALTO/2]) #HORIZONTAL
+        
         pygame.display.update()
     
 
@@ -76,18 +113,17 @@ def menu_geogebra():
             if event.type == pygame.QUIT:
                 exit()
         if boton_doit.draw(screen):
-            print(textinput.value)
+            funcion = textinput.value
+            assert_not_system(funcion)
             def funcion_geogebra(x):
-                return eval(textinput.value)
+                return eval(funcion)
             if graficar(funcion_geogebra) == 1:
                 print('Error')
         if boton_quit.draw(screen):
             return True
 
         
-        pygame.draw.line(screen,(0,0,0),[LARGO/2,0],[LARGO/2,ALTO]) #VERTICAL
-        pygame.draw.line(screen,(0,0,0),[0,ALTO/2],[LARGO,ALTO/2]) #HORIZONTAL
-        pygame.display.update()
+        dibujar_geogebra()
 
     #return True
 
@@ -143,7 +179,7 @@ def main_audio(code):
     audio = speech_recorder(code)
    
     
-    print(audio)
+    #print(audio)
 
     
     lista = os.listdir('D:\\Descargas\\backup\\Internet Explorer')
@@ -281,7 +317,7 @@ def mainmenu():
             print('yes')
             return 1
         if boton_geo.draw(screen):
-            print('func')
+            print('modo geogebra')
             return 2
         screen.blit(texto_si,[1024/2-158/2,400])
         screen.blit(texto_no,[1024/2-158/2+250,400])
